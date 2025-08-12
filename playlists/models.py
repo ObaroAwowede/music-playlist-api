@@ -26,6 +26,7 @@ class Album(models.Model):
     
 class Song(models.Model):
     artist = models.ForeignKey(Artist, on_delete = models.CASCADE)
+    album = models.ForeignKey(Album, on_delete = models.CASCADE)
     title = models.CharField(max_length = 100)
     genre = models.TextField()
     duration = models.TimeField()
