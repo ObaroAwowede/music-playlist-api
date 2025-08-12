@@ -7,6 +7,12 @@ class User(models.Model):
     def _str__(self):
         return self.name
 
+class Genre(models.Model):
+    name = models.CharField(max_length= 50, unique = True)
+    
+    def __str__(self):
+        return self.name
+
 class Artist(models.Model):
     name = models.CharField(max_length = 100)
     bio = models.TextField()
@@ -19,7 +25,7 @@ class Album(models.Model):
     title = models.CharField(max_length = 100)
     release_date = models.DateField()
     album_length = models.TimeField()
-    genre = models.TextField()
+    genres = models.ManyToManyField(Genre)
     
     def __str__(self):
         return self.title
@@ -28,7 +34,7 @@ class Song(models.Model):
     artist = models.ForeignKey(Artist, on_delete = models.CASCADE)
     album = models.ForeignKey(Album, on_delete = models.CASCADE)
     title = models.CharField(max_length = 100)
-    genre = models.TextField()
+    genres = models.ManyToManyField(Genre)
     duration = models.TimeField()
     
     def __str__(self):
@@ -39,6 +45,7 @@ class Playlist(models.Model):
     song = models.ManyToManyField(Song)
     description = models.TextField()
     size = models.IntegerField(default = 0)
+    user = models.ForeignKey(User, on_delete = models.CASCADE)
     
     def __str__(self):
         return self.title
