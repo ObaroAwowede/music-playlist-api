@@ -1,11 +1,9 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
-class User(models.Model):
-    name = models.CharField(max_length = 100)
-    email = models.EmailField(max_length = 254)
-    
+class User(AbstractUser):
     def _str__(self):
-        return self.name
+        return self.usernamename
 
 class Genre(models.Model):
     name = models.CharField(max_length= 50, unique = True)
@@ -42,7 +40,7 @@ class Song(models.Model):
 
 class Playlist(models.Model):
     title = models.CharField(max_length = 100)
-    song = models.ManyToManyField(Song)
+    songs = models.ManyToManyField(Song)
     description = models.TextField()
     size = models.IntegerField(default = 0)
     user = models.ForeignKey(User, on_delete = models.CASCADE)
