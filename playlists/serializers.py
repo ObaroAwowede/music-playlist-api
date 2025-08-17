@@ -31,6 +31,7 @@ class GenreSerializer(serializers.ModelSerializer):
 class PlaylistSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True) 
     song_count = serializers.SerializerMethodField()
+    size = song_count
     songs = SongSerializer(many=True, read_only=True)
     class Meta:
         model = Playlist
