@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from datetime import date
 
 class User(AbstractUser):
-    def _str__(self):
+    def __str__(self):
         return self.username
 
 class Genre(models.Model):
@@ -42,10 +42,21 @@ class Song(models.Model):
 
 class Playlist(models.Model):
     title = models.CharField(max_length = 100)
-    songs = models.ManyToManyField(Song)
+    songs = models.ManyToManyField(Song, through='PlaylistSong')
     description = models.TextField()
     size = models.IntegerField(default = 0)
     user = models.ForeignKey(User, on_delete = models.CASCADE)
     
     def __str__(self):
         return self.title
+    
+class PlaylistSong(models.Model):
+    playlist = models.ForeignKey(Playlist, on_delete=models.CASCADE)
+    song = models.ForeignKey(Song, on_delete=models.CASCADE)
+    order = models.IntegerField()
+    class Meta:
+        unique_together = ('playlist', 'song')
+        ordering = ['order']
+
+    def __str__(self):
+        return f"{self.song.title} in {self.playlist.title}"

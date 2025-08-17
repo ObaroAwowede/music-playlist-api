@@ -1,0 +1,9 @@
+{
+  "python.languageServer": "Pylance",
+  "python.analysis.extraPaths": [
+    ".",
+    "./music_playlist_api" 
+  ],
+  "python.envFile": "${workspaceFolder}/.env",
+  "python.analysis.typeCheckingMode": "basic"
+}
