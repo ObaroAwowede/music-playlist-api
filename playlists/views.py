@@ -1,29 +1,91 @@
 from django.shortcuts import render
-from rest_framework import generics
-from .models import Album, Artist, Song, Genre, Playlist
-from .serializers import AlbumSerializer, ArtistSerializer, SongSerializer, PlaylistSerializer, GenreSerializer
+from rest_framework import generics, permissions
+from .models import Album, Artist, Song, Playlist
+from .serializers import AlbumSerializer, ArtistSerializer, SongSerializer, PlaylistSerializer
 
+'''
+Album
+'''
 # For Creating an Album
-class AlbumCreate(generics.ListCreateAPIView):
+class AlbumListCreateView(generics.ListCreateAPIView):
     queryset = Album.objects.all() 
     serializer_class = AlbumSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    
+    def perform_create(self, serializer):
+        serializer.save(owner = self.request.user)
+    
+
+# For Updating an Album
+class AlbumUpdateView(generics.UpdateAPIView):
+    queryset = Album.objects.all()
+    serializer_class = AlbumSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def perform_update(self, serializer):
+        serializer.save()
+
+'''
+Artist
+'''
 
 # For Creating an Artist
-class ArtistCreate(generics.ListCreateAPIView):
+class ArtistListCreateView(generics.ListCreateAPIView):
     queryset = Artist.objects.all()
     serializer_class = ArtistSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    
+    def perform_create(self, serializer):
+        serializer.save(owner = self.request.user)
+
+# For Updating an Artist
+class ArtistUpdateView(generics.UpdateAPIView):
+    queryset = Artist.objects.all()
+    serializer_class = ArtistSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def perform_update(self, serializer):
+        serializer.save()
+
+'''
+Song
+'''
 
 # For Creating a Song
-class SongCreate(generics.ListCreateAPIView):
+class SongListCreateView(generics.ListCreateAPIView):
     queryset = Song.objects.all()
     serializer_class = SongSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    
+    def perform_create(self, serializer):
+        serializer.save(owner = self.request.user)
+  
+#For Updating a Song
+class SongUpdateView(generics.UpdateAPIView):
+    queryset = Song.objects.all()
+    serializer_class = SongSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def perform_update(self, serializer):
+        serializer.save()  
+
+'''
+Playlist
+'''
     
 # For Creating a Playlist
-class PlaylistCreate(generics.ListCreateAPIView):
+class PlaylistListCreateView(generics.ListCreateAPIView):
     queryset = Playlist.objects.all()
     serializer_class = PlaylistSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     
-# For Creating a Genre
-class GenreCreate(generics.ListCreateAPIView):
-    queryset = Genre.objects.all()
-    serializer_class = GenreSerializer
+    def perform_create(self, serializer):
+        serializer.save(owner = self.request.user)
+    
+class PlaylistUpdateView(generics.UpdateAPIView):
+    queryset = Playlist.objects.all()
+    serializer_class = PlaylistSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def perform_update(self, serializer):
+        serializer.save()  
