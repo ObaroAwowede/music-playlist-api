@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from datetime import date
+from django.conf import settings
 
 class User(AbstractUser):
     def __str__(self):
@@ -15,6 +16,11 @@ class Genre(models.Model):
 class Artist(models.Model):
     name = models.CharField(max_length = 100)
     bio = models.TextField()
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="artists"
+    )
     
     def __str__(self):
         return self.name
@@ -25,6 +31,11 @@ class Album(models.Model):
     release_date = models.DateField(default = date.today)
     album_length = models.TimeField()
     genres = models.ManyToManyField(Genre)
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="albums"
+    )
     
     def __str__(self):
         return self.title
@@ -36,6 +47,11 @@ class Song(models.Model):
     title = models.CharField(max_length = 100)
     genres = models.ManyToManyField(Genre)
     duration = models.TimeField()
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="songs"
+    )
     
     def __str__(self):
         return self.title
@@ -46,6 +62,11 @@ class Playlist(models.Model):
     description = models.TextField()
     size = models.IntegerField(default = 0)
     user = models.ForeignKey(User, on_delete = models.CASCADE)
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="albums"
+    )
     
     def __str__(self):
         return self.title
