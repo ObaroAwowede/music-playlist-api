@@ -19,7 +19,9 @@ class Artist(models.Model):
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name="artists"
+        related_name="artists",
+        null=True,
+        blank=True
     )
     
     def __str__(self):
@@ -34,7 +36,9 @@ class Album(models.Model):
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name="albums"
+        related_name="albums",
+        null=True,
+        blank=True
     )
     
     def __str__(self):
@@ -50,7 +54,9 @@ class Song(models.Model):
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name="songs"
+        related_name="songs",
+        null=True,
+        blank=True
     )
     
     def __str__(self):
@@ -65,8 +71,12 @@ class Playlist(models.Model):
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name="albums"
+        related_name="albums",
+        null=True,
+        blank=True
     )
+
+    
     
     def __str__(self):
         return self.title
