@@ -21,7 +21,7 @@ class AlbumListCreateView(generics.ListCreateAPIView):
 
 
 # For Updating an Album
-class AlbumUpdateView(generics.UpdateAPIView):
+class AlbumUpdateView(generics.RetrieveUpdateAPIView):
     queryset = Album.objects.all()
     serializer_class = AlbumSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -33,7 +33,7 @@ class AlbumUpdateView(generics.UpdateAPIView):
             album.genres.set(genres)
 
 # For deleting an Album
-class AlbumRetrieveDeleteView(generics.RetrieveDestroyAPIView):
+class AlbumDeleteView(generics.RetrieveDestroyAPIView):
     queryset = Album.objects.all().prefetch_related("genres")
     serializer_class = AlbumSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -53,7 +53,7 @@ class ArtistListCreateView(generics.ListCreateAPIView):
         serializer.save(owner = self.request.user)
 
 # For Updating an Artist
-class ArtistUpdateView(generics.UpdateAPIView):
+class ArtistUpdateView(generics.RetrieveUpdateAPIView):
     queryset = Artist.objects.all()
     serializer_class = ArtistSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -61,6 +61,13 @@ class ArtistUpdateView(generics.UpdateAPIView):
     def perform_update(self, serializer):
         serializer.save()
 
+# For deleting an Artist
+class ArtistDeleteView(generics.RetrieveDestroyAPIView):
+    queryset = Artist.objects.all()
+    serializer_class = ArtistSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    lookup_field = "pk"
+    
 '''
 Song
 '''
@@ -75,13 +82,19 @@ class SongListCreateView(generics.ListCreateAPIView):
         serializer.save(owner = self.request.user)
   
 #For Updating a Song
-class SongUpdateView(generics.UpdateAPIView):
+class SongUpdateView(generics.RetrieveUpdateAPIView):
     queryset = Song.objects.all()
     serializer_class = SongSerializer
     permission_classes = [permissions.IsAuthenticated]
     
     def perform_update(self, serializer):
         serializer.save()  
+        
+#For deleting a song
+class SongDeleteView(generics.RetrieveDestroyAPIView):
+    queryset = Song.objects.all()
+    serializer_class = SongSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
 '''
 Playlist
@@ -96,7 +109,7 @@ class PlaylistListCreateView(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         serializer.save(owner = self.request.user)
     
-class PlaylistUpdateView(generics.UpdateAPIView):
+class PlaylistUpdateView(generics.RetrieveUpdateAPIView):
     queryset = Playlist.objects.all()
     serializer_class = PlaylistSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -104,18 +117,25 @@ class PlaylistUpdateView(generics.UpdateAPIView):
     def perform_update(self, serializer):
         serializer.save()  
         
-# For creating a genre
+class PlaylistDeleteView(generics.RetrieveDestroyAPIView):
+    queryset = Playlist.objects.all()
+    serializer_class = PlaylistSerializer
+    permission_classes = [permissions.IsAuthenticated]
+        
+# For Listing a genre
 
-class GenreListCreateView(generics.ListAPIView):
+class GenreListView(generics.ListAPIView):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
     permission_classes = [permissions.AllowAny]
     
+# For Creating a genre (only admin)
 class GenreCreateView(generics.CreateAPIView):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
     permission_classes = [permissions.IsAdminUser]
 
+# For Deleting and Updating a genre (only admin)
 class GenreRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
