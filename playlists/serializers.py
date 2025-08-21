@@ -9,9 +9,15 @@ class UserSerializer(serializers.ModelSerializer):
 
 class AlbumSerializer(serializers.ModelSerializer):
     owner = UserSerializer(read_only=True)
+    genres = serializers.PrimaryKeyRelatedField(
+        many=True,
+        queryset=Genre.objects.all(),
+        required=False
+    )
     class Meta:
         model = Album
         fields = '__all__'
+        read_only_fields = ('owner',)
 
 class SongSerializer(serializers.ModelSerializer):
     owner = UserSerializer(read_only=True)
