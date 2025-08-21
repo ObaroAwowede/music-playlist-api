@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import generics, permissions
-from .models import Album, Artist, Song, Playlist
-from .serializers import AlbumSerializer, ArtistSerializer, SongSerializer, PlaylistSerializer
+from .models import Album, Artist, Song, Playlist, Genre
+from .serializers import AlbumSerializer, ArtistSerializer, SongSerializer, PlaylistSerializer, GenreSerializer
 
 '''
 Album
@@ -24,8 +24,9 @@ class AlbumUpdateView(generics.UpdateAPIView):
     
     def perform_update(self, serializer):
         serializer.save()
-        
-class AlbumRetrieveUpdateDeleteView(generics.DestroyAPIView):
+
+# For deleting an Album
+class AlbumRetrieveDeleteView(generics.RetrieveDestroyAPIView):
     queryset = Album.objects.all()
     serializer_class = AlbumSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -95,3 +96,20 @@ class PlaylistUpdateView(generics.UpdateAPIView):
     
     def perform_update(self, serializer):
         serializer.save()  
+        
+# For creating a genre
+
+class GenreListCreateView(generics.ListAPIView):
+    queryset = Genre.objects.all()
+    serializer_class = GenreSerializer
+    permission_classes = [permissions.AllowAny]
+    
+class GenreCreateView(generics.CreateAPIView):
+    queryset = Genre.objects.all()
+    serializer_class = GenreSerializer
+    permission_classes = [permissions.IsAdminUser]
+
+class GenreRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Genre.objects.all()
+    serializer_class = GenreSerializer
+    permission_classes = [permissions.IsAdminUser]
