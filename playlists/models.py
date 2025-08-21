@@ -31,7 +31,7 @@ class Album(models.Model):
     artist = models.ForeignKey(Artist, on_delete = models.CASCADE)
     title = models.CharField(max_length = 100)
     release_date = models.DateField(default = date.today)
-    album_length = models.TimeField()
+    album_length = models.DurationField()
     genres = models.ManyToManyField(Genre)
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -50,7 +50,7 @@ class Song(models.Model):
     release_date = models.DateField(default = date.today)
     title = models.CharField(max_length = 100)
     genres = models.ManyToManyField(Genre)
-    duration = models.TimeField()
+    duration = models.DurationField()
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,

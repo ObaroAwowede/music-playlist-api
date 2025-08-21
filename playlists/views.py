@@ -24,6 +24,12 @@ class AlbumUpdateView(generics.UpdateAPIView):
     
     def perform_update(self, serializer):
         serializer.save()
+        
+class AlbumRetrieveUpdateDeleteView(generics.DestroyAPIView):
+    queryset = Album.objects.all()
+    serializer_class = AlbumSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    lookup_field = "pk"
 
 '''
 Artist
