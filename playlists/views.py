@@ -13,8 +13,12 @@ class AlbumListCreateView(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     
     def perform_create(self, serializer):
-        serializer.save(owner = self.request.user)
-    
+        genres = serializer.validated_data.pop("genres", None)
+        album = serializer.save(owner=self.request.user)
+        if genres is not None:
+            album.genres.set(genres)
+
+
 
 # For Updating an Album
 class AlbumUpdateView(generics.UpdateAPIView):
@@ -23,11 +27,14 @@ class AlbumUpdateView(generics.UpdateAPIView):
     permission_classes = [permissions.IsAuthenticated]
     
     def perform_update(self, serializer):
-        serializer.save()
+        genres = serializer.validated_data.pop("genres", None)
+        album = serializer.save()
+        if genres is not None:
+            album.genres.set(genres)
 
 # For deleting an Album
 class AlbumRetrieveDeleteView(generics.RetrieveDestroyAPIView):
-    queryset = Album.objects.all()
+    queryset = Album.objects.all().prefetch_related("genres")
     serializer_class = AlbumSerializer
     permission_classes = [permissions.IsAuthenticated]
     lookup_field = "pk"
