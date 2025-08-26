@@ -67,7 +67,6 @@ class Playlist(models.Model):
     songs = models.ManyToManyField(Song, through='PlaylistSong')
     description = models.TextField()
     size = models.IntegerField(default = 0)
-    user = models.ForeignKey(User, on_delete = models.CASCADE)
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -82,7 +81,7 @@ class Playlist(models.Model):
         return self.title
     
 class PlaylistSong(models.Model):
-    playlist = models.ForeignKey(Playlist, on_delete=models.CASCADE)
+    playlist = models.ForeignKey(Playlist, on_delete=models.CASCADE,  related_name='playlist_songs')
     song = models.ForeignKey(Song, on_delete=models.CASCADE)
     order = models.IntegerField()
     class Meta:

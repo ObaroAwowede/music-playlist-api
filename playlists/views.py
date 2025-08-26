@@ -1,8 +1,10 @@
 from django.shortcuts import render
-from rest_framework import generics, permissions
-from .models import Album, Artist, Song, Playlist, Genre
+from rest_framework import generics, permissions, status, exceptions
+from .models import Album, Artist, Song, Playlist, Genre, PlaylistSong
 from .serializers import AlbumSerializer, ArtistSerializer, SongSerializer, PlaylistSerializer, GenreSerializer
 from .permissions import IsOwnerOrReadOnly
+from django.shortcuts import get_object_or_404
+from rest_framework.response import Response
 
 '''
 Album
@@ -14,6 +16,7 @@ class AlbumListCreateView(generics.ListCreateAPIView):
     permission_classes = [IsOwnerOrReadOnly]
     
     def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
         genres = serializer.validated_data.pop("genres", None)
         album = serializer.save(owner=self.request.user)
         if genres is not None:
@@ -122,7 +125,29 @@ class PlaylistDeleteView(generics.RetrieveDestroyAPIView):
     queryset = Playlist.objects.all()
     serializer_class = PlaylistSerializer
     permission_classes = [IsOwnerOrReadOnly]
+      
+# For adding and removing songs from a playlust  
+class PlaylistSongManagerView(generics.views.APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def post(self, request, pk):
+        """This is for adding a song to a playlist"""
+        playlist = get_object_or_404(Playlist, pk=pk)
+        if playlist.owner != request.user:
+            raise exceptions.PermissionDenied(detail="Must be teh creator of this playlist")
         
+        song = get_object_or_404(Song, pk = request.data.get('song_id'))
+        last = PlaylistSong.objects.filter(playlist=playlist).order_by('-order').first()
+        order = request.data.get('order') or (last.order + 1 if last else 1)
+        obj, created = PlaylistSong.objects.get_or_create(
+            playlist=playlist, song=song, defaults={'order': order}
+        )        
+        if not created:
+            return Response({'detail': 'Song already in playlist'}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(PlaylistSerializer(playlist, context={'request': request}).data, status=status.HTTP_201_CREATED)  
+
+
 # For Listing a genre
 
 class GenreListView(generics.ListAPIView):
