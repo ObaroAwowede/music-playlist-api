@@ -2,6 +2,7 @@ from django.shortcuts import render
 from rest_framework import generics, permissions
 from .models import Album, Artist, Song, Playlist, Genre
 from .serializers import AlbumSerializer, ArtistSerializer, SongSerializer, PlaylistSerializer, GenreSerializer
+from .permissions import IsOwnerOrReadOnly
 
 '''
 Album
@@ -10,7 +11,7 @@ Album
 class AlbumListCreateView(generics.ListCreateAPIView):
     queryset = Album.objects.all() 
     serializer_class = AlbumSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [IsOwnerOrReadOnly]
     
     def perform_create(self, serializer):
         genres = serializer.validated_data.pop("genres", None)
@@ -24,7 +25,7 @@ class AlbumListCreateView(generics.ListCreateAPIView):
 class AlbumUpdateView(generics.RetrieveUpdateAPIView):
     queryset = Album.objects.all()
     serializer_class = AlbumSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsOwnerOrReadOnly]
     
     def perform_update(self, serializer):
         genres = serializer.validated_data.pop("genres", None)
@@ -36,7 +37,7 @@ class AlbumUpdateView(generics.RetrieveUpdateAPIView):
 class AlbumDeleteView(generics.RetrieveDestroyAPIView):
     queryset = Album.objects.all().prefetch_related("genres")
     serializer_class = AlbumSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsOwnerOrReadOnly]
     lookup_field = "pk"
 
 '''
@@ -47,7 +48,7 @@ Artist
 class ArtistListCreateView(generics.ListCreateAPIView):
     queryset = Artist.objects.all()
     serializer_class = ArtistSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [IsOwnerOrReadOnly]
     
     def perform_create(self, serializer):
         serializer.save(owner = self.request.user)
@@ -56,7 +57,7 @@ class ArtistListCreateView(generics.ListCreateAPIView):
 class ArtistUpdateView(generics.RetrieveUpdateAPIView):
     queryset = Artist.objects.all()
     serializer_class = ArtistSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsOwnerOrReadOnly]
     
     def perform_update(self, serializer):
         serializer.save()
@@ -65,7 +66,7 @@ class ArtistUpdateView(generics.RetrieveUpdateAPIView):
 class ArtistDeleteView(generics.RetrieveDestroyAPIView):
     queryset = Artist.objects.all()
     serializer_class = ArtistSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsOwnerOrReadOnly]
     lookup_field = "pk"
     
 '''
@@ -76,7 +77,7 @@ Song
 class SongListCreateView(generics.ListCreateAPIView):
     queryset = Song.objects.all()
     serializer_class = SongSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [IsOwnerOrReadOnly]
     
     def perform_create(self, serializer):
         serializer.save(owner = self.request.user)
@@ -85,7 +86,7 @@ class SongListCreateView(generics.ListCreateAPIView):
 class SongUpdateView(generics.RetrieveUpdateAPIView):
     queryset = Song.objects.all()
     serializer_class = SongSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsOwnerOrReadOnly]
     
     def perform_update(self, serializer):
         serializer.save()  
@@ -94,7 +95,7 @@ class SongUpdateView(generics.RetrieveUpdateAPIView):
 class SongDeleteView(generics.RetrieveDestroyAPIView):
     queryset = Song.objects.all()
     serializer_class = SongSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsOwnerOrReadOnly]
 
 '''
 Playlist
@@ -104,7 +105,7 @@ Playlist
 class PlaylistListCreateView(generics.ListCreateAPIView):
     queryset = Playlist.objects.all()
     serializer_class = PlaylistSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [IsOwnerOrReadOnly]
     
     def perform_create(self, serializer):
         serializer.save(owner = self.request.user)
@@ -112,7 +113,7 @@ class PlaylistListCreateView(generics.ListCreateAPIView):
 class PlaylistUpdateView(generics.RetrieveUpdateAPIView):
     queryset = Playlist.objects.all()
     serializer_class = PlaylistSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsOwnerOrReadOnly]
     
     def perform_update(self, serializer):
         serializer.save()  
@@ -120,7 +121,7 @@ class PlaylistUpdateView(generics.RetrieveUpdateAPIView):
 class PlaylistDeleteView(generics.RetrieveDestroyAPIView):
     queryset = Playlist.objects.all()
     serializer_class = PlaylistSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsOwnerOrReadOnly]
         
 # For Listing a genre
 
