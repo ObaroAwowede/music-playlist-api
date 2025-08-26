@@ -12,6 +12,9 @@ urlpatterns = [
     path('songs/', views.SongListCreateView.as_view(), name = 'song-list-create-view'),
     path('songs/<int:pk>/update', views.SongUpdateView.as_view(), name = 'song-update-view'),
     path('songs/<int:pk>/delete', views.SongDeleteView.as_view(), name = 'song-delete-view'),
+    path('playlists/', views.PlaylistListCreateView.as_view(), name = 'playlist-list-create-view'),
+    path('playlists/<int:pk>/update', views.PlaylistUpdateView.as_view(), name = 'playlist-update-view'),
+    path('playlists/<int:pk>/delete', views.PlaylistDeleteView.as_view(), name = 'playlist-delete-view'),
     path('genres/', views.GenreListView.as_view(), name = 'genre-list-create-view'),
     path('genres/create', views.GenreCreateView.as_view(), name = 'genre-create-view')
 ]
