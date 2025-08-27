@@ -127,8 +127,10 @@ class PlaylistDeleteView(generics.RetrieveDestroyAPIView):
     permission_classes = [IsOwnerOrReadOnly]
       
 # For adding and removing songs from a playlust  
-class PlaylistSongManagerView(generics.views.APIView):
+class PlaylistSongManagerView(generics.RetrieveDestroyAPIView):
     permission_classes = [permissions.IsAuthenticated]
+    queryset = Playlist.objects.all()
+    serializer_class = PlaylistSerializer
     
     def post(self, request, pk):
         """This is for adding a song to a playlist"""
@@ -146,6 +148,17 @@ class PlaylistSongManagerView(generics.views.APIView):
             return Response({'detail': 'Song already in playlist'}, status=status.HTTP_400_BAD_REQUEST)
 
         return Response(PlaylistSerializer(playlist, context={'request': request}).data, status=status.HTTP_201_CREATED)  
+    
+    def delete(self, request, pk):
+        """This is for removing a song from a playlist"""
+        playlist = get_object_or_404(Playlist, pk=pk)
+        if playlist.owner != request.user:
+            raise exceptions.PermissionDenied("Must be the creator of this playlist")
+        song = get_object_or_404(Song, pk=request.data.get('song_id'))
+        ps = get_object_or_404(PlaylistSong, playlist = playlist, song = song)
+        ps.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+            
 
 
 # For Listing a genre
