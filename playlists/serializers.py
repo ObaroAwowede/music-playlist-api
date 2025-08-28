@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from .models import Album,Artist,Song,Genre,Playlist,User
 
-
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -61,3 +60,9 @@ class RegisterSerializer(serializers.ModelSerializer):
             email=validated_data.get('email')
         )
         return user
+    
+class UserDetailSerializer(serializers.ModelSerializer):
+    playlists = PlaylistSerializer(many=True, read_only=True)
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'email', 'playlists')

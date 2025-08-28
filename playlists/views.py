@@ -1,7 +1,7 @@
-from django.shortcuts import render
-from rest_framework import generics, permissions, status, exceptions
+from django.contrib.auth import get_user_model
+from rest_framework import generics, permissions, status, exceptions, filters
 from .models import Album, Artist, Song, Playlist, Genre, PlaylistSong
-from .serializers import AlbumSerializer, ArtistSerializer, SongSerializer, PlaylistSerializer, GenreSerializer, RegisterSerializer
+from .serializers import AlbumSerializer, ArtistSerializer, SongSerializer, PlaylistSerializer, GenreSerializer, RegisterSerializer, UserDetailSerializer
 from .permissions import IsOwnerOrReadOnly
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
@@ -28,6 +28,21 @@ class RegisterView(generics.GenericAPIView):
             'access': tokens['access'],
             'refresh': tokens['refresh'],
         }, status=status.HTTP_201_CREATED)
+
+User = get_user_model()  
+# For listing all the users
+class UserListView(generics.ListAPIView):
+    queryset = User.objects.all().prefetch_related('playlists')
+    serializer_class = UserDetailSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['username', 'first_name', 'last_name']
+
+# For getting details about a specific user (by pk)
+class UserDetailView(generics.RetrieveAPIView):
+    queryset = User.objects.all().prefetch_related('playlists')
+    serializer_class = UserDetailSerializer
+    permission_classes = [permissions.IsAuthenticated]
 '''
 Album
 '''
