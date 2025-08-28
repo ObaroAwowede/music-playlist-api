@@ -5,5 +5,10 @@
     "./music_playlist_api" 
   ],
   "python.envFile": "${workspaceFolder}/.env",
-  "python.analysis.typeCheckingMode": "basic"
+  "python.analysis.typeCheckingMode": "basic",
+  
 }
+
+
+  
+  
