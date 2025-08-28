@@ -1,11 +1,33 @@
 from django.shortcuts import render
 from rest_framework import generics, permissions, status, exceptions
 from .models import Album, Artist, Song, Playlist, Genre, PlaylistSong
-from .serializers import AlbumSerializer, ArtistSerializer, SongSerializer, PlaylistSerializer, GenreSerializer
+from .serializers import AlbumSerializer, ArtistSerializer, SongSerializer, PlaylistSerializer, GenreSerializer, RegisterSerializer
 from .permissions import IsOwnerOrReadOnly
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
+from rest_framework_simplejwt.tokens import RefreshToken # type: ignore
 
+def get_token_for_user(user):
+    refresh = RefreshToken.for_user(user)
+    return {
+        'refresh': str(refresh),
+        'access': str(refresh.access_token),
+    }
+
+class RegisterView(generics.GenericAPIView):
+    serializer_class = RegisterSerializer
+    permission_classes = [permissions.AllowAny]
+    
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data = request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        tokens = get_token_for_user(user)
+        return Response({
+            'user': RegisterSerializer(user, context={'request': request}).data,
+            'access': tokens['access'],
+            'refresh': tokens['refresh'],
+        }, status=status.HTTP_201_CREATED)
 '''
 Album
 '''
