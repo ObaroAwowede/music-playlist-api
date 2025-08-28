@@ -60,9 +60,14 @@ class RegisterSerializer(serializers.ModelSerializer):
             email=validated_data.get('email')
         )
         return user
-    
+
+class PlaylistDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Playlist
+        fields = ('id', 'title')
+
 class UserDetailSerializer(serializers.ModelSerializer):
-    playlists = PlaylistSerializer(many=True, read_only=True)
+    playlists = PlaylistDetailSerializer(many=True, read_only=True)
     class Meta:
         model = User
         fields = ('id', 'username', 'email', 'playlists')
