@@ -61,24 +61,18 @@ class AlbumListCreateView(generics.ListCreateAPIView):
 
 
 
-# For Updating an Album
-class AlbumUpdateView(generics.RetrieveUpdateAPIView):
-    queryset = Album.objects.all()
+#For Retrieving, Updating or deleting an album
+class AlbumRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Album.objects.all().prefetch_related("genres")
     serializer_class = AlbumSerializer
     permission_classes = [IsOwnerOrReadOnly]
+    lookup_field = "pk"
     
     def perform_update(self, serializer):
         genres = serializer.validated_data.pop("genres", None)
         album = serializer.save()
         if genres is not None:
             album.genres.set(genres)
-
-# For deleting an Album
-class AlbumDeleteView(generics.RetrieveDestroyAPIView):
-    queryset = Album.objects.all().prefetch_related("genres")
-    serializer_class = AlbumSerializer
-    permission_classes = [IsOwnerOrReadOnly]
-    lookup_field = "pk"
 
 '''
 Artist
@@ -93,21 +87,15 @@ class ArtistListCreateView(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         serializer.save(owner = self.request.user)
 
-# For Updating an Artist
-class ArtistUpdateView(generics.RetrieveUpdateAPIView):
-    queryset = Artist.objects.all()
-    serializer_class = ArtistSerializer
-    permission_classes = [IsOwnerOrReadOnly]
-    
-    def perform_update(self, serializer):
-        serializer.save()
-
-# For deleting an Artist
-class ArtistDeleteView(generics.RetrieveDestroyAPIView):
+#For Retrieving, Updating or deleting an artist
+class ArtistRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Artist.objects.all()
     serializer_class = ArtistSerializer
     permission_classes = [IsOwnerOrReadOnly]
     lookup_field = "pk"
+    
+    def perform_update(self, serializer):
+        serializer.save()
     
 '''
 Song
@@ -122,20 +110,14 @@ class SongListCreateView(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         serializer.save(owner = self.request.user)
   
-#For Updating a Song
-class SongUpdateView(generics.RetrieveUpdateAPIView):
+#For Retrieving, Updating or deleting a song
+class SongRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Song.objects.all()
     serializer_class = SongSerializer
     permission_classes = [IsOwnerOrReadOnly]
     
     def perform_update(self, serializer):
-        serializer.save()  
-        
-#For deleting a song
-class SongDeleteView(generics.RetrieveDestroyAPIView):
-    queryset = Song.objects.all()
-    serializer_class = SongSerializer
-    permission_classes = [IsOwnerOrReadOnly]
+        serializer.save()
 
 '''
 Playlist
@@ -149,19 +131,15 @@ class PlaylistListCreateView(generics.ListCreateAPIView):
     
     def perform_create(self, serializer):
         serializer.save(owner = self.request.user)
-    
-class PlaylistUpdateView(generics.RetrieveUpdateAPIView):
+
+#For Retrieving, Updating or deleting a playlist
+class PlaylistRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Playlist.objects.all()
     serializer_class = PlaylistSerializer
     permission_classes = [IsOwnerOrReadOnly]
     
     def perform_update(self, serializer):
-        serializer.save()  
-        
-class PlaylistDeleteView(generics.RetrieveDestroyAPIView):
-    queryset = Playlist.objects.all()
-    serializer_class = PlaylistSerializer
-    permission_classes = [IsOwnerOrReadOnly]
+        serializer.save() 
       
 # For adding and removing songs from a playlust  
 class PlaylistSongManagerView(generics.RetrieveDestroyAPIView):
