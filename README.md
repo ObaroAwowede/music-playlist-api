@@ -123,3 +123,141 @@ curl -X POST http://127.0.0.1:8000/api/playlists/1/songs/ \
 
 * Use the *Headers* tab to add `Authorization: Bearer <ACCESS_TOKEN>` or choose Authorization ➜ Bearer Token.
 * Also use the *Headers* tab to add `Content-Type: application/json`
+
+## Examples (Postman)
+*Registering a new account
+```bash
+POST https://manlikeobaro.pythonanywhere.com/api/register/
+Content-Type: application/json
+```
+* body
+```
+      {
+          "username": "User",
+          "email": "user@gmail.com",
+          "password": "userpassword"
+      }
+```
+*response
+```
+      {
+          "user": {
+              "id": 10,
+              "username": "User",
+              "email": "user@gmail.com"
+          },
+                "access": <ACCESS_TOKEN>,
+                "refresh": <REFRESH_TOKEN>
+      }
+```
+
+*Logging in to get a token
+```bash
+POST https://manlikeobaro.pythonanywhere.com/api/token/
+Content-Type: application/json
+```
+* body
+```
+      {
+          "username": "User",
+          "password": "userpassword"
+      }
+```
+*response
+```
+      {
+          "refresh": <REFRESH_TOKEN>,
+          "access": <ACCESS_TOKEN>
+      }
+```
+
+*Listing all artists
+```bash
+POST https://manlikeobaro.pythonanywhere.com/api/artists/
+Content-Type: application/json
+Authorization: Bearer <ACCESS_TOKEN>
+```
+
+*response
+```
+      [
+            {
+                "id": 1,
+                "owner": {
+                    "id": 1,
+                    "username": "testuser",
+                    "email": "testuser@gmail.com"
+                },
+                "name": "Eminem",
+                "bio": "From Detroit, a legend"
+            },
+            ...
+            ...
+      ]
+```
+
+*Creating an artist
+```bash
+POST https://manlikeobaro.pythonanywhere.com/api/artists/
+Content-Type: application/json
+Authorization: Bearer <ACCESS_TOKEN>
+```
+* body
+```
+      {
+          "name": "J.cole",
+          "bio": "A good rapper"
+      }
+```
+*response
+```
+      {
+    "id": 11,
+    "owner": {
+        "id": 10,
+        "username": "User",
+        "email": "user@gmail.com"
+    },
+    "name": "J.cole",
+    "bio": "A good rapper"
+}
+```
+
+*Updating an artist
+```bash
+PUT https://manlikeobaro.pythonanywhere.com/api/artists/11/ (Note: Change the number to the id of the artist you created)
+Content-Type: application/json
+Authorization: Bearer <ACCESS_TOKEN>
+```
+* body
+```
+      {
+          "name": "J.cole",
+          "bio": "A decent rapper"
+      }
+```
+*response
+```
+{
+    "id": 11,
+    "owner": {
+        "id": 10,
+        "username": "User",
+        "email": "user@gmail.com"
+    },
+    "name": "J.cole",
+    "bio": "A decent rapper"
+}
+```
+
+*Deleting an artist
+```bash
+DELETE https://manlikeobaro.pythonanywhere.com/api/artists/11/ (Note: Change the number to the id of the artist you created)
+Content-Type: application/json
+Authorization: Bearer <ACCESS_TOKEN>
+```
+* No body request (since we've gotten the artist by id in the link)
+*response
+```
+204 NO CONTENT
+```
