@@ -1,5 +1,5 @@
 # Music Playlist API
-A RESTful API built with **Django** and **Django REST Framework** to manage users, artists, albums, songs, playlists and genres.
+A RESTful API built with **Django** and **Django REST Framework** to manage users, artists, albums, songs, and playlists.
 ## Quick start
 
 **Clone repository & install dependencies**
@@ -125,7 +125,7 @@ curl -X POST http://127.0.0.1:8000/api/playlists/1/songs/ \
 * Also use the *Headers* tab to add `Content-Type: application/json`
 
 ## Examples (Postman)
-###Registering a new account
+### Registering a new account
 ```bash
 POST https://manlikeobaro.pythonanywhere.com/api/register/
 Content-Type: application/json
@@ -151,7 +151,7 @@ Content-Type: application/json
       }
 ```
 
-###Logging in to get a token
+### Logging in to get a token
 ```bash
 POST https://manlikeobaro.pythonanywhere.com/api/token/
 Content-Type: application/json
@@ -171,7 +171,7 @@ Content-Type: application/json
       }
 ```
 
-###Listing all artists
+### Listing all artists
 ```bash
 POST https://manlikeobaro.pythonanywhere.com/api/artists/
 Content-Type: application/json
@@ -196,7 +196,7 @@ Authorization: Bearer <ACCESS_TOKEN>
       ]
 ```
 
-###Creating an artist
+### Creating an artist
 ```bash
 POST https://manlikeobaro.pythonanywhere.com/api/artists/
 Content-Type: application/json
@@ -223,7 +223,7 @@ Authorization: Bearer <ACCESS_TOKEN>
 }
 ```
 
-###Updating an artist
+### Updating an artist
 ```bash
 PUT https://manlikeobaro.pythonanywhere.com/api/artists/11/ (Note: Change the number to the id of the artist you created)
 Content-Type: application/json
@@ -250,18 +250,18 @@ Authorization: Bearer <ACCESS_TOKEN>
 }
 ```
 
-###Deleting an artist
+### Deleting an artist
 ```bash
 DELETE https://manlikeobaro.pythonanywhere.com/api/artists/11/ (Note: Change the number to the id of the artist you created)
 Content-Type: application/json
 Authorization: Bearer <ACCESS_TOKEN>
 ```
 * No body request (since we've gotten the artist by id in the link)
-*response
+<p>*response</p>
 ```
 204 NO CONTENT
 ```
-###Listing all albums
+### Listing all albums
 ```bash
 GET https://manlikeobaro.pythonanywhere.com/api/albums/
 Content-Type: application/json
@@ -293,7 +293,7 @@ Authorization: Bearer <ACCESS_TOKEN>
 ]
 ```
 
-###Creating an album
+### Creating an album
 ```bash
 POST https://manlikeobaro.pythonanywhere.com/api/albums/
 Content-Type: application/json
@@ -329,9 +329,9 @@ Authorization: Bearer <ACCESS_TOKEN>
 }
 ```
 
-###Updating an album
+### Updating an album
 ```bash
-POST https://manlikeobaro.pythonanywhere.com/api/albums/9/
+PUT https://manlikeobaro.pythonanywhere.com/api/albums/9/
 Content-Type: application/json
 Authorization: Bearer <ACCESS_TOKEN>
 ```
@@ -365,14 +365,88 @@ Authorization: Bearer <ACCESS_TOKEN>
 }
 ```
 
-###Deleting an album
+### Deleting an album
 ```bash
 DELETE https://manlikeobaro.pythonanywhere.com/api/albums/9/
 Content-Type: application/json
 Authorization: Bearer <ACCESS_TOKEN>
 ```
 * No body request
-*response
+<p>*response</p>
 ```
 204 NO CONTENT
+```
+
+### Creating a song
+```bash
+POST https://manlikeobaro.pythonanywhere.com/api/songs/
+Content-Type: application/json
+Authorization: Bearer <ACCESS_TOKEN>
+```
+* body
+```
+{
+    "release_date": "2024-04-05",
+    "title": "Fever",
+    "duration": "00:02:23",
+    "artist": 12,
+    "album": 9,
+    "genres": [1]
+}
+```
+*response
+```
+{
+    "id": 5,
+    "owner": {
+        "id": 2,
+        "username": "testuser4",
+        "email": "testuser4@gmail.com"
+    },
+    "release_date": "2024-04-05",
+    "title": "Fever",
+    "duration": "00:02:23",
+    "artist": 12,
+    "album": 9,
+    "genres": [
+        1
+    ]
+}
+```
+
+### Updating a song
+```bash
+PUT https://manlikeobaro.pythonanywhere.com/api/songs/5/
+Content-Type: application/json
+Authorization: Bearer <ACCESS_TOKEN>
+```
+* body
+```
+{
+    "release_date": "2024-04-05",
+    "title": "7 Minute Drill",
+    "duration": "00:03:32",
+    "artist": 12,
+    "album": 9,
+    "genres": [1]
+}
+```
+*response
+```
+{
+    "id": 5,
+    "owner": {
+        "id": 2,
+        "username": "testuser4",
+        "email": "testuser4@gmail.com"
+    },
+    "release_date": "2024-04-05",
+    "title": "7 Minute Drill",
+    "duration": "00:03:32",
+    "artist": 12,
+    "album": 9,
+    "genres": [
+        1
+    ]
+}
 ```
