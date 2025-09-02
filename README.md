@@ -125,7 +125,7 @@ curl -X POST http://127.0.0.1:8000/api/playlists/1/songs/ \
 * Also use the *Headers* tab to add `Content-Type: application/json`
 
 ## Examples (Postman)
-*Registering a new account
+###Registering a new account
 ```bash
 POST https://manlikeobaro.pythonanywhere.com/api/register/
 Content-Type: application/json
@@ -151,7 +151,7 @@ Content-Type: application/json
       }
 ```
 
-*Logging in to get a token
+###Logging in to get a token
 ```bash
 POST https://manlikeobaro.pythonanywhere.com/api/token/
 Content-Type: application/json
@@ -171,7 +171,7 @@ Content-Type: application/json
       }
 ```
 
-*Listing all artists
+###Listing all artists
 ```bash
 POST https://manlikeobaro.pythonanywhere.com/api/artists/
 Content-Type: application/json
@@ -196,7 +196,7 @@ Authorization: Bearer <ACCESS_TOKEN>
       ]
 ```
 
-*Creating an artist
+###Creating an artist
 ```bash
 POST https://manlikeobaro.pythonanywhere.com/api/artists/
 Content-Type: application/json
@@ -223,7 +223,7 @@ Authorization: Bearer <ACCESS_TOKEN>
 }
 ```
 
-*Updating an artist
+###Updating an artist
 ```bash
 PUT https://manlikeobaro.pythonanywhere.com/api/artists/11/ (Note: Change the number to the id of the artist you created)
 Content-Type: application/json
@@ -250,13 +250,128 @@ Authorization: Bearer <ACCESS_TOKEN>
 }
 ```
 
-*Deleting an artist
+###Deleting an artist
 ```bash
 DELETE https://manlikeobaro.pythonanywhere.com/api/artists/11/ (Note: Change the number to the id of the artist you created)
 Content-Type: application/json
 Authorization: Bearer <ACCESS_TOKEN>
 ```
 * No body request (since we've gotten the artist by id in the link)
+*response
+```
+204 NO CONTENT
+```
+###Listing all albums
+```bash
+GET https://manlikeobaro.pythonanywhere.com/api/albums/
+Content-Type: application/json
+Authorization: Bearer <ACCESS_TOKEN>
+```
+
+*response
+```
+[
+    {
+        "id": 2,
+        "owner": {
+            "id": 1,
+            "username": "testuser",
+            "email": "testuser@gmail.com"
+        },
+        "genres": [
+            1,
+            7,
+            8
+        ],
+        "title": "God's Son",
+        "release_date": "2002-12-13",
+        "album_length": "00:57:06",
+        "artist": 2
+    },
+    ...
+    ...
+]
+```
+
+###Creating an album
+```bash
+POST https://manlikeobaro.pythonanywhere.com/api/albums/
+Content-Type: application/json
+Authorization: Bearer <ACCESS_TOKEN>
+```
+* body
+```
+{
+    "genres": [1,7],
+    "title": "The Off Season",
+    "release_date": "2021-05-14",
+    "album_length": "00:39:03",
+    "artist": 12
+}
+```
+*response
+```
+{
+    "id": 9,
+    "owner": {
+        "id": 2,
+        "username": "testuser4",
+        "email": "testuser4@gmail.com"
+    },
+    "genres": [
+        1,
+        7
+    ],
+    "title": "The Off Season",
+    "release_date": "2021-05-14",
+    "album_length": "00:39:03",
+    "artist": 12
+}
+```
+
+###Updating an album
+```bash
+POST https://manlikeobaro.pythonanywhere.com/api/albums/9/
+Content-Type: application/json
+Authorization: Bearer <ACCESS_TOKEN>
+```
+* body
+```
+{
+    "genres": [1,7],
+    "title": "Might Delete Later",
+    "release_date": "2024-04-5",
+    "album_length": "00:43:10",
+    "artist": 12
+}
+```
+*response
+```
+{
+    "id": 9,
+    "owner": {
+        "id": 2,
+        "username": "testuser4",
+        "email": "testuser4@gmail.com"
+    },
+    "genres": [
+        1,
+        7
+    ],
+    "title": "Might Delete Later",
+    "release_date": "2024-04-05",
+    "album_length": "00:43:10",
+    "artist": 12
+}
+```
+
+###Deleting an album
+```bash
+DELETE https://manlikeobaro.pythonanywhere.com/api/albums/9/
+Content-Type: application/json
+Authorization: Bearer <ACCESS_TOKEN>
+```
+* No body request
 *response
 ```
 204 NO CONTENT
