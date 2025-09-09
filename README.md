@@ -450,3 +450,133 @@ Authorization: Bearer <ACCESS_TOKEN>
     ]
 }
 ```
+
+### Deleting a song
+```bash
+DELETE https://manlikeobaro.pythonanywhere.com/api/songs/5/
+Content-Type: application/json
+Authorization: Bearer <ACCESS_TOKEN>
+```
+* No body request
+<p>*response</p>
+```
+204 NO CONTENT
+```
+
+
+### Listing all playlists
+```bash
+GET https://manlikeobaro.pythonanywhere.com/api/albums/
+Content-Type: application/json
+Authorization: Bearer <ACCESS_TOKEN>
+```
+
+*response
+```
+[
+    {
+        "id": 1,
+        "title": "Test Playlist",
+        "songs": [
+            {
+                "id": 2,
+                "owner": {
+                    "id": 1,
+                    "username": "testuser",
+                    "email": "testuser@gmail.com"
+                },
+                "release_date": "2002-12-13",
+                "title": "Get Down",
+                "duration": "00:04:04",
+                "artist": 2,
+                "album": 2,
+                "genres": [
+                    1,
+                    7
+                ]
+            }
+        ],
+        "description": "This is just a test to see how it works",
+        "owner": {
+            "id": 1,
+            "username": "testuser",
+            "email": "testuser@gmail.com"
+        },
+        "size": 1
+    },
+    ...
+    ...
+]
+```
+
+### Creating a playlist
+```bash
+POST https://manlikeobaro.pythonanywhere.com/api/playlists/
+Content-Type: application/json
+Authorization: Bearer <ACCESS_TOKEN>
+```
+* body
+```
+{
+    "title": "My final test playlist",
+    "description": "My creativity knows no bounds",
+    "songs": [2,4,5]
+}
+```
+*response
+```
+{
+    "id": 5,
+    "title": "My final test playlist",
+    "songs": [],
+    "description": "My creativity knows no bounds",
+    "owner": {
+        "id": 2,
+        "username": "testuser4",
+        "email": "testuser4@gmail.com"
+    },
+    "size": 0
+}
+```
+
+### Updating a playlist
+```bash
+PUT https://manlikeobaro.pythonanywhere.com/api/playlists/5/
+Content-Type: application/json
+Authorization: Bearer <ACCESS_TOKEN>
+```
+* body
+```
+{
+    "title": "My actual final test playlist",
+    "description": "My creativity still knows no bounds",
+    "songs": []
+}
+```
+*response
+```
+{
+    "id": 5,
+    "title": "My actual final test playlist",
+    "songs": [],
+    "description": "My creativity still knows no bounds",
+    "owner": {
+        "id": 2,
+        "username": "testuser4",
+        "email": "testuser4@gmail.com"
+    },
+    "size": 0
+}
+```
+
+### Deleting a playlist
+```bash
+DELETE https://manlikeobaro.pythonanywhere.com/api/playlists/5/
+Content-Type: application/json
+Authorization: Bearer <ACCESS_TOKEN>
+```
+* No body request
+<p>*response</p>
+```
+204 NO CONTENT
+```
