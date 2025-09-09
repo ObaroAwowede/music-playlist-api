@@ -257,10 +257,9 @@ Content-Type: application/json
 Authorization: Bearer <ACCESS_TOKEN>
 ```
 * No body request (since we've gotten the artist by id in the link)
-<p>*response</p>
-```
-204 NO CONTENT
-```
+<p>response</p>
+<p>204 NO CONTENT</p>
+
 ### Listing all albums
 ```bash
 GET https://manlikeobaro.pythonanywhere.com/api/albums/
@@ -372,10 +371,8 @@ Content-Type: application/json
 Authorization: Bearer <ACCESS_TOKEN>
 ```
 * No body request
-<p>*response</p>
-```
-204 NO CONTENT
-```
+<p>response</p>
+<p>204 NO CONTENT</p>
 
 ### Creating a song
 ```bash
@@ -458,10 +455,8 @@ Content-Type: application/json
 Authorization: Bearer <ACCESS_TOKEN>
 ```
 * No body request
-<p>*response</p>
-```
-204 NO CONTENT
-```
+<p>response</p>
+<p>204 NO CONTENT</p>
 
 
 ### Listing all playlists
@@ -576,7 +571,70 @@ Content-Type: application/json
 Authorization: Bearer <ACCESS_TOKEN>
 ```
 * No body request
-<p>*response</p>
+<p>response</p>
+<p>204 NO CONTENT</p>
+
+### Adding songs to a playlist
+```bash
+POST https://manlikeobaro.pythonanywhere.com/api/playlists/5/songs/
+Content-Type: application/json
+Authorization: Bearer <ACCESS_TOKEN>
 ```
-204 NO CONTENT
+
+* body
 ```
+{
+    "song_id": 4,
+    "order": 1
+}
+```
+*response
+```
+{
+    "id": 5,
+    "title": "My actual final test playlist",
+    "songs": [
+        {
+            "id": 4,
+            "owner": {
+                "id": 9,
+                "username": "mikey",
+                "email": "mikey@gmail.com"
+            },
+            "release_date": "2002-12-12",
+            "title": "Liars",
+            "duration": "00:03:53",
+            "artist": 10,
+            "album": 7,
+            "genres": [
+                1,
+                3
+            ]
+        }
+    ],
+    "description": "My creativity still knows no bounds",
+    "owner": {
+        "id": 2,
+        "username": "testuser4",
+        "email": "testuser4@gmail.com"
+    },
+    "size": 1
+}
+```
+
+### Removing songs from a playlist
+```bash
+DELETE https://manlikeobaro.pythonanywhere.com/api/playlists/5/songs/
+Content-Type: application/json
+Authorization: Bearer <ACCESS_TOKEN>
+```
+
+* body
+```
+{
+    "song_id": 4,
+}
+```
+
+<p>response</p>
+<p>204 NO CONTENT</p>
